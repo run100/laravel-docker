@@ -1,0 +1,76 @@
+kaigree: &phprunner
+  restart: always
+  #build: .
+  image: wjdocker.lab/wanjia2/phprunner:7.1
+  # image: registry-internal.cn-hangzhou.aliyuncs.com/xxx/xxx    #线上部署时，换成 『阿里云容器服务』的私有镜像地址
+  # extra_hosts:                                                 #如有需要可在此处定义容器内的/etc/hosts 内容
+  #   - "rabbitmq:111.111.111.111"
+
+  # $PWD:/var/www  挂载仅在开发时用，线上部署时，请不要挂载 任何文件系统到 /var/www 下 (包括子目录); 
+  # 容器初次启动时，源码会通过下面定义的APP_GIT_URL，自动 PULL 下来, 任何挂载到/var/www 下的文件系统都会被清空
+  # 注意：不要在 /var/www 下存储持久化内容； 容器内整个 / 根目录都是容器文件系统，容器间文件互不共享。持久化内容请挂载『数据卷』来存储
+
+
+  volumes:
+    - ~/wanjia/confs:/data/nas/codes/confs
+    - ~/Downloads/uploads:/data/uploads
+    - $PWD:/var/www
+
+  #links:
+    #- dishtable-register:dishtable_register
+    #- redis-server:redis-server
+    #- mysql:mysql
+    #- rabbitmq:rabbitmq
+    #- mysql-shequ:mysql-shequ
+  extra_hosts:
+    - "mysql:192.168.29.242"
+    - "wjdb:192.168.29.238"
+    - "mongo:192.168.29.238"
+    - "redis:192.168.29.238"
+    - "rabbitmq:192.168.29.238"
+  ports:
+    - 9082:80
+  #  - 9050:9050
+  environment: &phprunner-env
+    cap-add: SYS_PTRACE
+    APP_INIT_SCRIPT: /var/www/docker/app_init
+    APP_START_SCRIPT: /var/www/docker/app_start
+
+q-default:
+  <<: *phprunner
+  ports: []
+  labels:
+    aliyun.routing.port_80: 'http://qdaemon'       #QDaemon 服务不对外提供服务，但是要覆盖掉 laravel 服务中定义的字段
+  environment:
+    <<: *phprunner-env
+    APP_ROLE: noweb nofpm q_default
+
+
+
+#redis-server:
+#  restart: always
+#  image: hub.c.163.com/library/redis:alpine
+#  ports:
+#    - 6379:6379
+
+#rabbitmq:
+#  restart: always
+#  hostname: rabbitmq
+#  image: hub.c.163.com/library/rabbitmq:management
+
+  
+
+#mysql:
+  # external:
+  #host: 192.168.29.242
+   
+  # ports:
+  #   - 3306
+       
+  #mysql-shequ:
+  # external:
+  # hosts: 192.168.29.238
+  # ports:
+  #   - 3306
+   
+

@@ -1,0 +1,4 @@
+#!/usr/bin/env php
+<?php
+
+echo "代码更新完毕", PHP_EOL;

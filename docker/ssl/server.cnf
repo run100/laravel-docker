@@ -1,0 +1,51 @@
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+
+[v3_req] 
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[req_distinguished_name]
+commonName_default = goodjobs.lab
+organizationName_default = CloudHR
+organizationalUnitName_default = Tech
+localityName_default = 合肥市
+stateOrProvinceName_default = 安徽省
+countryName_default = CN
+emailAddress_default = cloudhr@365jia.cn
+
+countryName = Country Name (2 letter code)
+stateOrProvinceName = State or Province Name (full name)
+localityName = Locality Name (eg, city)
+organizationalUnitName	= Organizational Unit Name (eg, section)
+commonName = Common Name (eg, YOUR name)
+commonName_max	= 64
+emailAddress = Email Address
+emailAddress_max = 40
+
+[alt_names]
+DNS.1 = 365jia.lab
+DNS.2 = 365lin.lab
+DNS.3 = *.365jia.lab
+DNS.4 = *.365lin.lab
+DNS.5 = *.wz1.dev.365jia.com
+DNS.6 = *.sibei.dev.365jia.com
+DNS.7 = *.zzw.dev.365jia.com
+DNS.8 = *.guxy.dev.365jia.com
+DNS.9 = guxy.dev.365jia.com
+DNS.10 = *.guxy.sqdev.365jia.com
+DNS.11 = guxy.sqdev.365jia.com
+DNS.12 = yundian.beta.365jia.com
+DNS.13 = *.liqi.dev.365jia.com
+DNS.14 = liqi.dev.365jia.com
+DNS.15 = *.liqi.sqdev.365jia.com
+DNS.16 = wz1.sqdev.365jia.com
+DNS.17 = *.wz1.dev.365jia.com
+DNS.18 = wz1.dev.365jia.com
+DNS.19 = *.wz1.sqdev.365jia.com
+DNS.20 = wz1.sqdev.365jia.com
+DNS.21 = *.chfei.dev.365jia.com
+DNS.22 = *.chfei2.dev.365jia.com
+
