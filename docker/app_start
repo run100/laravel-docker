@@ -1,31 +1,25 @@
 #!/bin/bash
 
+chmod -R a+rwX /var/log/nginx /var/log/php
+
+if [[ ! -d /var/www/log/queue ]]; then
+        mkdir /var/www/log/queue
+        chmod 777 /var/www/log/queue
+fi
+
+if [[ ! -d /var/run/cron ]]; then
+        mkdir /var/run/cron
+        chmod 777 /var/run/cron
+fi
+
+
 declare -A roles
 for constant in $APP_ROLE
 do
     roles[$constant]=1
 done
 
-chmod 755 /usr/local/bin
-chmod 755 /usr/local
-
-rm -rf /var/spool/cron/crontabs/*
-CRONTAB=/var/spool/cron/crontabs/root
-
-if [[ "$APP_ROLE" != "" ]]; then
-    echo "APP_ROLE=$APP_ROLE" >> $CRONTAB
-fi
-cat docker/crontab >> $CRONTAB
-echo >> $CRONTAB
-chown -R root:crontab $CRONTAB
-chmod 600 $CRONTAB
-
-
-if [[ ! -d /var/run/cron ]]; then
-    mkdir /var/run/cron
-    chmod 777 /var/run/cron
-fi
-
+rm /var/spool/cron/crontabs/*
 for constant in $APP_ROLE
 do
     for file in $(find docker/crontabs -type f -name $constant:*); do
@@ -33,6 +27,9 @@ do
         CRONTAB=/var/spool/cron/crontabs/${PARTS[1]}
 
         if [[ ! -f $CRONTAB ]]; then
+            echo "SHELL=\"/bin/bash\"" > $CRONTAB
+            echo "PATH=\"/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin\"" >> $CRONTAB
+            echo "TZ=Asia/Shanghai" >> $CRONTAB
             echo "APP_ROLE=$APP_ROLE" >> $CRONTAB
         fi
         cat $file >> $CRONTAB
@@ -42,11 +39,5 @@ do
         chmod 600 $CRONTAB
     done
 done
-
-
-if [[ ${roles["q_default"]} ]]; then
-  sudo -u www-data /var/www/artisan queue:work --tries=1 redis &
-fi
-
 
 

@@ -4,27 +4,7 @@ touch /root/.app_inited
 
 mv /var/www /var/www.bk
 
-ln -s /data/nas/codes/ka-igree /var/www
-
-cd /var/www/public
-#ln -s /data/igree_uploads uploads
-
-cd /var/www
-
-chmod 777 -R storage bootstrap/cache
-rm -rf storage/logs
-rm -rf /var/log/kaigree
-#ln -fs /var/log/kaigree storage/logs
-mkdir storage/logs
-mkdir /var/log/kaigree
-mkdir /var/log/kaigree/laravel/ && mkdir /var/log/kaigree/lumen/  && mkdir /var/log/kaigree/wechat/
-touch /var/log/kaigree/laravel/laravel.log &&  chmod a+rw /var/log/kaigree/laravel/laravel.log
-touch /var/log/kaigree/lumen/lumen.log  && chmod a+rw  /var/log/kaigree/lumen/lumen.log
-touch /var/log/kaigree/wechat/wechat.log && chmod a+rw /var/log/kaigree/wechat/wechat.log
-
-ln -fs /var/log/kaigree/laravel/laravel.log  storage/logs/laravel.log
-ln -fs /var/log/kaigree/lumen/lumen.log  storage/logs/lumen.log
-ln -fs /var/log/kaigree/wechat/wechat.log  storage/logs/wechat.log
+ln -s /data/nas/codes/laravel-docker /var/www
 
 ./artisan config:cache
 ./artisan route:cache
