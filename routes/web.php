@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/world', ['uses'=>'\App\Http\Controllers\Controller@world']);
