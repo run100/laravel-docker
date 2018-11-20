@@ -16,3 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('/world', ['uses'=>'\App\Http\Controllers\Controller@world']);
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
