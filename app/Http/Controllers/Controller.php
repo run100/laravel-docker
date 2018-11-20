@@ -14,6 +14,7 @@ class Controller extends BaseController
 
     public function world(Request $request)
     {
+        echo time();
         dd($request->all());
         exit();
     }
