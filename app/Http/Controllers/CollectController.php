@@ -13,6 +13,8 @@ class CollectController extends Controller
     //
     public function collect()
     {
+
+        dump(bcrypt('365jia'));
         $orders = [[
             'id' => 9655,
             'oid' => 'ORDER9655',
