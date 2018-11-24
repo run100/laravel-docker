@@ -5,8 +5,9 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Product;
 
-class Product extends TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * A basic test example.
@@ -16,5 +17,12 @@ class Product extends TestCase
     public function testExample()
     {
         $this->assertTrue(true);
+    }
+
+    public function testAProductHasAName()
+    {
+        $product = new Product('Iphone');
+
+        $this->assertEquals('Iphone', $product->name());
     }
 }
