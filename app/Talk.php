@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Talk whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Talk whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $email
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Talk whereEmail($value)
  */
 class Talk extends Model
 {

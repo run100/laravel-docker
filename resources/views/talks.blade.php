@@ -31,15 +31,13 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <table class="table table-striped task-table">
-                    <thead>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </thead>
+
                     <tbody>
                     @foreach ($talks as $talk)
                         <tr>
-                            <td class="table-text"><div>{{ $talk->message }}</div></td>
-                            <td>{{  date('H:i', strtotime($talk->created_at)) }}                                   </td>
+
+                            <td class="table-text">{{ strstr($talk->email, '@', true)  }} <div>{{ $talk->message }}  {{  date('H:i', strtotime($talk->created_at)) }}    </div></td>
+
                         </tr>
                     @endforeach
                     </tbody>

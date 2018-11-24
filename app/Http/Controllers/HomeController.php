@@ -44,6 +44,7 @@ class HomeController extends Controller
         $talk = new Talk();
         $talk->uid = Auth::user()->id;
         $talk->message = $request->get('message');
+        $talk->email = Auth::user()->email;
         $talk->save();
 
         return redirect(route('talks'));
