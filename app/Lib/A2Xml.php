@@ -7,6 +7,9 @@
  */
 
 namespace App\Lib;
+
+use XMLWriter;
+
 class A2Xml
 {
     private $xml = null;
@@ -29,6 +32,7 @@ class A2Xml
                 $this->xml->endElement();
                 continue;
             }
+            echo $key.':'.$value.'<br/>';
             $this->xml->writeElement($key, $value);
         }
         if (!$eIsArray) {
@@ -38,32 +42,35 @@ class A2Xml
     }
 
     //签名加密流程
-    function sign($data){
+    function sign($data)
+    {
         //读取密钥文件
         // $pem = file_get_contents(dirname(__FILE__).'/keypem.pem');
-        $pem = storage_path('app/public/keypem.pem');
+        $pem = file_get_contents(storage_path('app/public/keypem.pem'));
         //获取私钥
         $pkeyid = openssl_pkey_get_private($pem);
         //MD5WithRSA私钥加密
-        openssl_sign($data,$sign,$pkeyid,OPENSSL_ALGO_MD5);
+        openssl_sign($data, $sign, $pkeyid, OPENSSL_ALGO_MD5);
         //返回base64加密之后的数据
-        $t=base64_encode($sign);
+        $t = base64_encode($sign);
         //解密-1:error验证错误 1:correct验证成功 0:incorrect验证失败
-        // $pubkey = openssl_pkey_get_public($pem);
-        // $ok = openssl_verify($data,base64_decode($t),$pubkey,OPENSSL_ALGO_MD5);
-        // var_dump($ok);
+//        $pubkey = openssl_pkey_get_public($pem);
+//        $ok = openssl_verify($data,base64_decode($t),$pubkey,OPENSSL_ALGO_MD5);
+//        var_dump($ok);
         return $t;
     }
+
     //通过curl模拟post的请求；
-    function SendDataByCurl($url,$data){
+    function SendDataByCurl($url, $data)
+    {
         //对空格进行转义
-        $url = str_replace(' ','+',$url);
+        $url = str_replace(' ', '+', $url);
         $ch = curl_init();
         //设置选项，包括URL
         curl_setopt($ch, CURLOPT_URL, "$url");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch,CURLOPT_TIMEOUT,3); //定义超时3秒钟
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3); //定义超时3秒钟
         // POST数据
         curl_setopt($ch, CURLOPT_POST, 1);
         // 把post的变量加上
@@ -73,7 +80,7 @@ class A2Xml
         $errorCode = curl_errno($ch);
         //释放curl句柄
         curl_close($ch);
-        if(0 !== $errorCode) {
+        if (0 !== $errorCode) {
             return false;
         }
         return $output;

@@ -27,3 +27,4 @@ Route::get('/test2', 'CollectController@test2')->name('test2');
 
 Route::get('/scanCode', 'FuyouController@scanCode')->name('scancode');
 Route::get('/order1', 'FuyouController@order1')->name('order1');
+Route::get('/order2', 'FuyouController@order2')->name('order2');

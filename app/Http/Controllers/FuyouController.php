@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 
 class FuyouController extends Controller
 {
+    const CONST_NO = '1265';
     //
     public function scanCode(Request $request)
     {
@@ -16,6 +17,62 @@ class FuyouController extends Controller
 
         $arr = simplexml_load_string(urldecode($req));
         dd($arr);
+        return Response::HTTP_FOUND;
+    }
+
+    public function order2()
+    {
+        $xml = new A2Xml();
+
+        $data = [];
+        $data['ins_cd'] = "08A9999999";
+        $data['mchnt_cd'] = "0002900F0370542";
+        $data['goods_des'] = "描述";
+        $data['order_amt'] = "1";
+        $data['notify_url'] = "http://requestbin.fullcontact.com/yp0k7vyp";
+        $data['addn_inf'] = "";
+        $data['curr_type'] = "CNY";
+        $data['term_id'] = "88888888";
+        $data['goods_detail'] = "";
+        $data['goods_tag'] = "";
+        $data['version'] = "1";
+        $data['random_str'] = time();
+        $data['mchnt_order_no'] = self::CONST_NO.time();
+        $data['term_ip'] = "117.29.110.187";
+        $data['txn_begin_ts'] = date('YmdHis', time());
+        $data['product_id'] = "test";
+        $data['limit_pay'] = 'no_credit';
+        $data['trade_type'] = 'JSAPI';
+        $data['openid'] = "oMbrt0LuH6uRfAvDldgFiJDD07b4";
+        $data['sub_openid'] = "";
+        $data['sub_appid'] = "";
+
+
+        ksort($data);
+        $sign = urldecode(http_build_query($data));
+        // dd($sign);
+
+        //RSAwithMD5+base64加密后得到的sign
+        $data['sign'] = $xml->sign($sign);
+
+        //完整的xml格式
+        $a = "<?xml version=\"1.0\" encoding=\"GBK\" standalone=\"yes\"?><xml>" . $xml->toXml($data) . "</xml>";
+
+        //经过两次urlencode()之后的字符串
+        $b = "req=" . urlencode(urlencode($a));
+
+        $url = 'https://fundwx.fuiou.com/wxPreCreate';
+
+        //返回的xml字符串
+        $resultXml = URLdecode($xml->SendDataByCurl($url, $b));
+        // dd($resultXml);
+
+        //将xml转化成对象
+        $ob = simplexml_load_string($resultXml);
+
+        //输出结果
+        dd($ob);
+
         return Response::HTTP_FOUND;
     }
 
@@ -29,8 +86,6 @@ class FuyouController extends Controller
         $data['order_type'] = "WECHAT";
         $data['order_amt'] = "1";
         $data['notify_url'] = "http://requestbin.fullcontact.com/yp0k7vyp";
-
-
         $data['addn_inf'] = "";
         $data['curr_type'] = "CNY";
         $data['term_id'] = "88888888";
@@ -38,16 +93,22 @@ class FuyouController extends Controller
         $data['goods_tag'] = "";
         $data['version'] = "1";
         $data['random_str'] = time();
-        $data['mchnt_order_no'] = time();
+        $data['mchnt_order_no'] = self::CONST_NO.time();
         $data['term_ip'] = "117.29.110.187";
         $data['txn_begin_ts'] = date('YmdHis', time());
+        // $data['trade_type'] = "LETPAY";
 
         //拼装过的需要签名的字符串串
-        $sign = "addn_inf=" . $data['addn_inf'] . "&curr_type=" . $data['curr_type'] . "&goods_des=" . $data['goods_des'] . "&goods_detail=" . $data['goods_detail'] . "&goods_tag=" . $data['goods_tag'] . "&ins_cd=" . $data['ins_cd'] . "&mchnt_cd=" . $data['mchnt_cd'] . "&mchnt_order_no=" . $data['mchnt_order_no'] . "&notify_url=" . $data['notify_url'] . "&order_amt=" . $data['order_amt'] . "&order_type=" . $data['order_type'] . "&random_str=" . $data['random_str'] . "&term_id=" . $data['term_id'] . "&term_ip=" . $data['term_ip'] . "&txn_begin_ts=" . $data['txn_begin_ts'] . "&version=" . $data['version'];
+        // $sign = "addn_inf=" . $data['addn_inf'] . "&curr_type=" . $data['curr_type'] . "&goods_des=" . $data['goods_des'] . "&goods_detail=" . $data['goods_detail'] . "&goods_tag=" . $data['goods_tag'] . "&ins_cd=" . $data['ins_cd'] . "&mchnt_cd=" . $data['mchnt_cd'] . "&mchnt_order_no=" . $data['mchnt_order_no'] . "&notify_url=" . $data['notify_url'] . "&order_amt=" . $data['order_amt'] . "&order_type=" . $data['order_type'] . "&random_str=" . $data['random_str'] . "&term_id=" . $data['term_id'] . "&term_ip=" . $data['term_ip'] . "&txn_begin_ts=" . $data['txn_begin_ts'] . "&version=" . $data['version'];
 
+        ksort($data);
+        $sign = urldecode(http_build_query($data));
+        //dd($sign);
 
         //RSAwithMD5+base64加密后得到的sign
         $data['sign'] = $xml->sign($sign);
+
+
 
         //完整的xml格式
         $a = "<?xml version=\"1.0\" encoding=\"GBK\" standalone=\"yes\"?><xml>" . $xml->toXml($data) . "</xml>";
