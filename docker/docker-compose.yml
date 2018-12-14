@@ -8,8 +8,8 @@ laravel-docker: &phprunner
   ports:
     - 6082:80
   extra_hosts:
-    - "mysql:192.168.0.102"
-    - "redis-server:192.168.0.102"
+    - "mysql:192.168.48.26"
+    - "redis-server:192.168.48.26"
   environment: &phprunner-env
     cap-add: SYS_PTRACE
     APP_INIT_SCRIPT: /var/www/docker/app_init
