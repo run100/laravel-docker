@@ -22,4 +22,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/talks', 'HomeController@talks')->name('talks');
 Route::post('/posttalks', 'HomeController@postTalks')->name('posttalks');
 
-Route::get('/collect', 'CollectController@collect')->name('collect');
+Route::get('/collect', 'CollectController@collect2')->name('collect');
+Route::get('/test2', 'CollectController@test2')->name('test2');
