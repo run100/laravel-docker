@@ -14,34 +14,43 @@ class CollectController extends Controller
     public function test2()
     {
         // $scores = file_get_contents('https://api.github.com/users/run100/events');
-        $json = json_decode(file_get_contents(public_path('events.json')), true);
+        //$json = json_decode(file_get_contents(public_path('events.json')), true);
         // dump($json);
 
-        $eventTypes = [];
-        foreach ($json as $event) {
-            $eventTypes[] = $event['type'];
-        }
-        dump($eventTypes);
+//        $scoresum = collect($json)->pluck('type')->map(function ($eventType) {
+//            return  collect([
+//                'ForkEvent'=>5,
+//                'WatchEvent'=>4,
+//                'PushEvent'=>3
+//            ])->get($eventType, 1);
+//        })->sum();
+//
+//        dump($scoresum);
+        array_map();
+        $thisYear = [
+            1 => 123,
+            2 => 456,
+            3 => 789
+        ];
 
-        $score = 0;
-        foreach ($eventTypes as $eventType) {
-            switch ($eventType) {
-                case 'ForkEvent':
-                    $score += 5;
-                    break;
-                case 'WatchEvent':
-                    $score += 4;
-                    break;
-                case 'PushEvent':
-                    $score += 3;
-                    break;
-                default:
-                    $score += 2;
-                    break;
-            }
-        }
+        $lastyear = [
+            1 => 122,
+            2 => 278,
+            3 => 1000
+        ];
 
-        return response($score);
+//        $profit = [];
+//        foreach ($thisYear as $key => $item) {
+//            $profit[] = $item-$lastyear[$key];
+//        }
+
+        $profit = collect($thisYear)->zip($lastyear)->map(function ($item) {
+            return $item->first() - $item->last();
+        });
+
+        print_r($profit);
+
+        return response(date('Y-m-d H:i:s'));
     }
 
     //
